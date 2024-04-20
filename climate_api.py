@@ -1,6 +1,6 @@
-'''
-import openmeteo_requests
 
+import openmeteo_requests
+import matplotlib.pyplot as plt
 import requests_cache
 import pandas as pd
 from retry_requests import retry
@@ -10,12 +10,16 @@ cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 openmeteo = openmeteo_requests.Client(session = retry_session)
 
+
+latitude = float(input("Enter latitude: "))
+longitude = float(input("Enter longitude: ")) 
+
 # Make sure all required weather variables are listed here
 # The order of variables in hourly or daily is important to assign them correctly below
 url = "https://climate-api.open-meteo.com/v1/climate"
 params = {
-	"latitude": 52.52,
-	"longitude": 13.41,
+	"latitude": latitude,
+    "longitude": longitude,
 	"start_date": "2025-01-01",
 	"end_date": "2050-12-31",
 	"models": ["CMCC_CM2_VHR4", "FGOALS_f3_H", "HiRAM_SIT_HR", "MRI_AGCM3_2_S", "EC_Earth3P_HR", "MPI_ESM1_2_XR", "NICAM16_8S"],
@@ -43,7 +47,16 @@ daily_data = {"date": pd.date_range(
 daily_data["temperature_2m_max"] = daily_temperature_2m_max
 
 daily_dataframe = pd.DataFrame(data = daily_data)
-print(daily_dataframe) '''
+
+plt.plot(daily_dataframe['date'], daily_dataframe['temperature_2m_max'])
+plt.xlabel('Date')
+plt.ylabel('temperature_2m_max')
+plt.title('Climate change')
+plt.xticks(rotation=45)
+plt.tight_layout()
+
+# Show the plot
+plt.show()
 
 
 
@@ -96,7 +109,7 @@ daily_dataframe = pd.DataFrame(data=daily_data)
 print(daily_dataframe) ''' 
 
 
-
+'''
 import openmeteo_requests
 import requests_cache
 import pandas as pd
@@ -153,5 +166,5 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 # Show the plot
-plt.show()
+plt.show() '''
 
