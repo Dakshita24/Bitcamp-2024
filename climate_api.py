@@ -3,6 +3,7 @@ import openmeteo_requests
 import matplotlib.pyplot as plt
 import requests_cache
 import pandas as pd
+import numpy as np
 from retry_requests import retry
 
 # Setup the Open-Meteo API client with cache and retry on error
@@ -54,7 +55,25 @@ plt.ylabel('temperature_2m_max')
 plt.title('Climate change')
 plt.xticks(rotation=45)
 plt.tight_layout()
+#Test
+npxs = np.array(daily_dataframe['date'])
+npys = np.array(daily_dataframe['temperature_2m_max'])
 
+
+def Pearson_correlation(X,Y):
+   if len(X)==len(Y):
+       Sum_xy = sum((X-np.mean(X))*(Y-np.mean(Y)))
+       Sum_x_squared = sum((X-np.mean(X))**2)
+       Sum_y_squared = sum((Y-np.mean(Y))**2)      
+       corr = Sum_xy / np.sqrt(Sum_x_squared * Sum_y_squared)
+   return corr
+npxs_int = []
+for i in npxs:
+    print(i)
+    npxs_int.append(int(i.year))
+print(Pearson_correlation(npxs_int, npys))
+
+#EndTest
 # Show the plot
 plt.show()
 
